@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Generator | Ayoub Portfolio</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .project-header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .color-generator {
+        max-width: 900px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .color-display {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 20px;
+        margin: 40px 0;
+      }
+
+      .color-box {
+        aspect-ratio: 1;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 20px var(--card-shadow);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .color-box:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 10px 30px var(--card-shadow);
+      }
+
+      .color-box::after {
+        content: attr(data-hex);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        backdrop-filter: blur(10px);
+      }
+
+      .controls {
+        margin: 40px 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .generate-btn {
+        padding: 16px 50px;
+        border: none;
+        border-radius: 50px;
+        background: linear-gradient(
+          135deg,
+          var(--accent-primary),
+          var(--accent-secondary)
+        );
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 20px rgba(108, 92, 231, 0.3);
+      }
+
+      .generate-btn:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 30px rgba(108, 92, 231, 0.4);
+      }
+
+      .generate-btn:active {
+        transform: translateY(-1px) scale(1.02);
+      }
+
+      .lock-btn {
+        padding: 10px 20px;
+        border: 2px solid var(--accent-primary);
+        border-radius: 25px;
+        background: transparent;
+        color: var(--accent-primary);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .lock-btn:hover {
+        background: var(--accent-primary);
+        color: white;
+      }
+
+      .lock-btn.locked {
+        background: var(--accent-primary);
+        color: white;
+      }
+
+      .gradient-view {
+        width: 100%;
+        height: 300px;
+        border-radius: 20px;
+        margin: 40px 0;
+        box-shadow: 0 10px 30px var(--card-shadow);
+        transition: all 0.3s ease;
+      }
+
+      .copy-message {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px 40px;
+        background: var(--accent-primary);
+        color: white;
+        border-radius: 50px;
+        font-weight: 600;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        z-index: 10000;
+      }
+
+      .copy-message.show {
+        opacity: 1;
+      }
+
+      @media (max-width: 768px) {
+        .color-display {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div class="project-container">
+      <a href="index.html" class="back-button">← Back to Portfolio</a>
+
+      <div class="project-header">
+        <h1 class="section-title">Color Generator</h1>
+        <p
+          style="
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+          "
+        >
+          Generate beautiful random color palettes. Click any color to copy its
+          hex code, or lock colors you like before generating new ones!
+        </p>
+      </div>
+
+      <div class="color-generator">
+        <div class="gradient-view" id="gradientView"></div>
+
+        <div class="color-display" id="colorDisplay"></div>
+
+        <div class="controls">
+          <button class="generate-btn" onclick="generateColors()">
+            Generate New Colors
+          </button>
+          <button class="lock-btn" onclick="lockAll()" id="lockAllBtn">
+            Lock All
+          </button>
+        </div>
+      </div>
+
+      <div class="copy-message" id="copyMessage">Hex code copied!</div>
+    </div>
+
+    <script src="projects.js"></script>
+    <script>
+      let colors = [];
+      let lockedColors = new Set();
+
+      // Generate random hex color
+      function generateHexColor() {
+        return (
+          "#" +
+          Math.floor(Math.random() * 16777215)
+            .toString(16)
+            .padStart(6, "0")
+        );
+      }
+
+      // Generate colors
+      function generateColors() {
+        const colorCount = 5;
+        const newColors = [];
+
+        for (let i = 0; i < colorCount; i++) {
+          if (lockedColors.has(i)) {
+            newColors.push(colors[i]);
+          } else {
+            newColors.push(generateHexColor());
+          }
+        }
+
+        colors = newColors;
+        renderColors();
+        updateGradient();
+      }
+
+      // Render color boxes
+      function renderColors() {
+        const container = document.getElementById("colorDisplay");
+        container.innerHTML = "";
+
+        colors.forEach((color, index) => {
+          const colorBox = document.createElement("div");
+          colorBox.className = "color-box";
+          colorBox.style.backgroundColor = color;
+          colorBox.setAttribute("data-hex", color.toUpperCase());
+          colorBox.setAttribute("data-index", index);
+
+          const lockIcon = document.createElement("div");
+          lockIcon.style.position = "absolute";
+          lockIcon.style.top = "10px";
+          lockIcon.style.right = "10px";
+          lockIcon.style.fontSize = "20px";
+          lockIcon.style.opacity = lockedColors.has(index) ? "1" : "0";
+          lockIcon.style.transition = "opacity 0.3s ease";
+          lockIcon.textContent = "🔒";
+          colorBox.appendChild(lockIcon);
+
+          colorBox.addEventListener("click", (e) => {
+            if (e.target === lockIcon) return;
+            copyToClipboard(color);
+          });
+
+          colorBox.addEventListener("dblclick", () => {
+            toggleLock(index);
+          });
+
+          container.appendChild(colorBox);
+        });
+      }
+
+      // Update gradient view
+      function updateGradient() {
+        const gradientView = document.getElementById("gradientView");
+        const gradientString = `linear-gradient(135deg, ${colors.join(", ")})`;
+        gradientView.style.background = gradientString;
+      }
+
+      // Copy to clipboard
+      function copyToClipboard(color) {
+        navigator.clipboard.writeText(color.toUpperCase()).then(() => {
+          showCopyMessage();
+        });
+      }
+
+      // Show copy message
+      function showCopyMessage() {
+        const message = document.getElementById("copyMessage");
+        message.classList.add("show");
+        setTimeout(() => {
+          message.classList.remove("show");
+        }, 2000);
+      }
+
+      // Toggle lock
+      function toggleLock(index) {
+        if (lockedColors.has(index)) {
+          lockedColors.delete(index);
+        } else {
+          lockedColors.add(index);
+        }
+        renderColors();
+        updateLockAllButton();
+      }
+
+      // Lock all
+      function lockAll() {
+        const allLocked =
+          colors.length > 0 && lockedColors.size === colors.length;
+        if (allLocked) {
+          lockedColors.clear();
+        } else {
+          colors.forEach((_, index) => lockedColors.add(index));
+        }
+        renderColors();
+        updateLockAllButton();
+      }
+
+      // Update lock all button
+      function updateLockAllButton() {
+        const btn = document.getElementById("lockAllBtn");
+        const allLocked =
+          colors.length > 0 && lockedColors.size === colors.length;
+        btn.textContent = allLocked ? "Unlock All" : "Lock All";
+        btn.classList.toggle("locked", allLocked);
+      }
+
+      // Initialize
+      window.addEventListener("DOMContentLoaded", () => {
+        generateColors();
+      });
+    </script>
+  </body>
+</html>

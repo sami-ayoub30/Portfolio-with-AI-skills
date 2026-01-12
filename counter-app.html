@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Counter App | Ayoub Portfolio</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .project-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .counter-app {
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+        background: var(--bg-secondary);
+        padding: 60px;
+        border-radius: 30px;
+        box-shadow: 0 20px 60px var(--card-shadow);
+      }
+
+      .counter-display {
+        font-size: 120px;
+        font-weight: 700;
+        color: var(--accent-primary);
+        margin: 40px 0;
+        min-height: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .counter-display.pulse {
+        animation: pulse 0.3s ease;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+      }
+
+      .counter-controls {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 40px 0;
+      }
+
+      .counter-btn {
+        padding: 20px 40px;
+        border: none;
+        border-radius: 50px;
+        font-size: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 120px;
+        box-shadow: 0 5px 20px var(--card-shadow);
+      }
+
+      .counter-btn:active {
+        transform: scale(0.95);
+      }
+
+      .increment-btn {
+        background: linear-gradient(135deg, var(--accent-secondary), #00d4aa);
+        color: white;
+      }
+
+      .increment-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 184, 148, 0.4);
+      }
+
+      .decrement-btn {
+        background: linear-gradient(135deg, #ff7675, #fd79a8);
+        color: white;
+      }
+
+      .decrement-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(255, 118, 117, 0.4);
+      }
+
+      .reset-btn {
+        background: var(--bg-primary);
+        color: var(--accent-primary);
+        border: 2px solid var(--accent-primary);
+      }
+
+      .reset-btn:hover {
+        background: var(--accent-primary);
+        color: white;
+        transform: translateY(-3px);
+      }
+
+      .limit-settings {
+        margin: 40px 0;
+        padding: 30px;
+        background: var(--bg-primary);
+        border-radius: 20px;
+      }
+
+      .limit-settings h3 {
+        color: var(--accent-primary);
+        margin-bottom: 20px;
+        font-size: 24px;
+      }
+
+      .limit-input-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 15px 0;
+      }
+
+      .limit-input-group label {
+        color: var(--text-secondary);
+        font-weight: 600;
+        min-width: 100px;
+      }
+
+      .limit-input {
+        padding: 12px 20px;
+        border: 2px solid var(--accent-primary);
+        border-radius: 25px;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        font-size: 16px;
+        font-weight: 600;
+        width: 120px;
+        text-align: center;
+      }
+
+      .limit-input:focus {
+        outline: none;
+        border-color: var(--accent-secondary);
+        box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+      }
+
+      .status-message {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 15px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      .status-message.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .status-message.error {
+        background: rgba(255, 118, 117, 0.2);
+        color: #ff7675;
+        border: 2px solid #ff7675;
+      }
+
+      .status-message.success {
+        background: rgba(0, 184, 148, 0.2);
+        color: #00b894;
+        border: 2px solid #00b894;
+      }
+
+      @media (max-width: 768px) {
+        .counter-app {
+          padding: 40px 30px;
+        }
+
+        .counter-display {
+          font-size: 80px;
+          min-height: 120px;
+        }
+
+        .counter-btn {
+          padding: 15px 30px;
+          font-size: 18px;
+          min-width: 100px;
+        }
+      }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div class="project-container">
+      <a href="index.html" class="back-button">← Back to Portfolio</a>
+
+      <div class="counter-app">
+        <h1 class="section-title" style="margin-bottom: 20px">Counter App</h1>
+        <p style="color: var(--text-secondary); margin-bottom: 30px">
+          Interactive counter with customizable limits and smooth animations
+        </p>
+
+        <div class="counter-display" id="counterDisplay">0</div>
+
+        <div class="counter-controls">
+          <button class="counter-btn decrement-btn" onclick="decrement()">
+            - Decrease
+          </button>
+          <button class="counter-btn reset-btn" onclick="reset()">Reset</button>
+          <button class="counter-btn increment-btn" onclick="increment()">
+            + Increase
+          </button>
+        </div>
+
+        <div class="limit-settings">
+          <h3>Set Limits</h3>
+          <div class="limit-input-group">
+            <label>Minimum:</label>
+            <input
+              type="number"
+              class="limit-input"
+              id="minLimit"
+              value="0"
+              onchange="updateLimits()"
+            />
+          </div>
+          <div class="limit-input-group">
+            <label>Maximum:</label>
+            <input
+              type="number"
+              class="limit-input"
+              id="maxLimit"
+              value="100"
+              onchange="updateLimits()"
+            />
+          </div>
+          <div class="status-message" id="statusMessage"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="projects.js"></script>
+    <script>
+      let count = 0;
+      let minLimit = 0;
+      let maxLimit = 100;
+
+      // Update display
+      function updateDisplay() {
+        const display = document.getElementById("counterDisplay");
+        display.textContent = count;
+        display.classList.add("pulse");
+        setTimeout(() => {
+          display.classList.remove("pulse");
+        }, 300);
+
+        // Change color based on value
+        if (count === minLimit) {
+          display.style.color = "#ff7675";
+        } else if (count === maxLimit) {
+          display.style.color = "#00b894";
+        } else {
+          display.style.color = "var(--accent-primary)";
+        }
+      }
+
+      // Show status message
+      function showStatus(message, type) {
+        const statusEl = document.getElementById("statusMessage");
+        statusEl.textContent = message;
+        statusEl.className = `status-message ${type} show`;
+        setTimeout(() => {
+          statusEl.classList.remove("show");
+        }, 3000);
+      }
+
+      // Increment
+      function increment() {
+        if (count < maxLimit) {
+          count++;
+          updateDisplay();
+        } else {
+          showStatus(`Maximum limit (${maxLimit}) reached!`, "error");
+          const display = document.getElementById("counterDisplay");
+          display.style.animation = "shake 0.5s ease";
+          setTimeout(() => {
+            display.style.animation = "";
+          }, 500);
+        }
+      }
+
+      // Decrement
+      function decrement() {
+        if (count > minLimit) {
+          count--;
+          updateDisplay();
+        } else {
+          showStatus(`Minimum limit (${minLimit}) reached!`, "error");
+          const display = document.getElementById("counterDisplay");
+          display.style.animation = "shake 0.5s ease";
+          setTimeout(() => {
+            display.style.animation = "";
+          }, 500);
+        }
+      }
+
+      // Reset
+      function reset() {
+        count = 0;
+        updateDisplay();
+        showStatus("Counter reset to 0", "success");
+      }
+
+      // Update limits
+      function updateLimits() {
+        const minInput = document.getElementById("minLimit");
+        const maxInput = document.getElementById("maxLimit");
+
+        minLimit = parseInt(minInput.value) || 0;
+        maxLimit = parseInt(maxInput.value) || 100;
+
+        if (minLimit >= maxLimit) {
+          showStatus("Minimum must be less than maximum!", "error");
+          minLimit = 0;
+          maxLimit = 100;
+          minInput.value = minLimit;
+          maxInput.value = maxLimit;
+          return;
+        }
+
+        // Adjust count if it's outside new limits
+        if (count < minLimit) {
+          count = minLimit;
+        } else if (count > maxLimit) {
+          count = maxLimit;
+        }
+
+        updateDisplay();
+        showStatus("Limits updated successfully!", "success");
+      }
+
+      // Add shake animation
+      const style = document.createElement("style");
+      style.textContent = `
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+      }
+    `;
+      document.head.appendChild(style);
+
+      // Initialize
+      window.addEventListener("DOMContentLoaded", () => {
+        updateDisplay();
+      });
+    </script>
+  </body>
+</html>

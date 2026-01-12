@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Gallery | Ayoub Portfolio</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .gallery-header {
+        text-align: center;
+        margin-bottom: 50px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .product-gallery {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+      }
+
+      .product-card {
+        background: var(--bg-secondary);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px var(--card-shadow);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px var(--card-shadow);
+      }
+
+      .product-image {
+        width: 100%;
+        height: 250px;
+        background: linear-gradient(
+          135deg,
+          var(--gradient-1),
+          var(--gradient-2)
+        );
+        position: relative;
+        overflow: hidden;
+      }
+
+      .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+      }
+
+      .product-card:hover .product-image img {
+        transform: scale(1.1);
+      }
+
+      .product-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 8px 15px;
+        background: var(--accent-secondary);
+        color: white;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+
+      .product-badge.new {
+        background: var(--accent-secondary);
+      }
+
+      .product-badge.sale {
+        background: #ff7675;
+      }
+
+      .product-info {
+        padding: 25px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .product-category {
+        color: var(--accent-primary);
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+      }
+
+      .product-name {
+        color: var(--text-primary);
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .product-description {
+        color: var(--text-secondary);
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+        flex-grow: 1;
+      }
+
+      .product-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+      }
+
+      .product-price {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .price-current {
+        color: var(--accent-primary);
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .price-old {
+        color: var(--text-secondary);
+        font-size: 16px;
+        text-decoration: line-through;
+        opacity: 0.6;
+      }
+
+      .add-to-cart {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 25px;
+        background: linear-gradient(
+          135deg,
+          var(--accent-primary),
+          var(--accent-secondary)
+        );
+        color: white;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .add-to-cart:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(108, 92, 231, 0.3);
+      }
+
+      .add-to-cart:active {
+        transform: scale(0.98);
+      }
+
+      .add-to-cart.added {
+        background: var(--accent-secondary);
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 10000;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+      }
+
+      .modal.show {
+        display: flex;
+      }
+
+      .modal-content {
+        background: var(--bg-secondary);
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        position: relative;
+        animation: modalFadeIn 0.3s ease;
+      }
+
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .close-modal {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 30px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+      }
+
+      .close-modal:hover {
+        background: var(--bg-primary);
+        color: var(--text-primary);
+      }
+
+      @media (max-width: 768px) {
+        .back-button {
+          position: relative;
+          top: 0;
+          left: 0;
+          margin-bottom: 30px;
+        }
+
+        .project-container {
+          padding: 60px 20px;
+        }
+
+        .products-grid {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div class="project-container">
+      <a href="index.html" class="back-button">← Back to Portfolio</a>
+
+      <div class="gallery-header">
+        <h1 class="section-title">Product Gallery</h1>
+        <p style="font-size: 18px; color: var(--text-secondary)">
+          Browse our collection of modern products. Click "Add to Cart" to
+          interact with the gallery!
+        </p>
+      </div>
+
+      <div class="product-gallery">
+        <div class="products-grid" id="productsGrid"></div>
+      </div>
+    </div>
+
+    <div class="modal" id="cartModal">
+      <div class="modal-content">
+        <button class="close-modal" onclick="closeModal()">&times;</button>
+        <h2 style="color: var(--accent-primary); margin-bottom: 20px">
+          Added to Cart!
+        </h2>
+        <p
+          id="modalMessage"
+          style="color: var(--text-secondary); margin-bottom: 30px"
+        ></p>
+        <button class="add-to-cart" onclick="closeModal()" style="width: 100%">
+          Continue Shopping
+        </button>
+      </div>
+    </div>
+
+    <script src="projects.js"></script>
+    <script>
+      const products = [
+        {
+          id: 1,
+          name: "Wireless Headphones",
+          category: "Electronics",
+          description:
+            "Premium wireless headphones with noise cancellation and 30-hour battery life.",
+          price: 199.99,
+          oldPrice: 249.99,
+          image:
+            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%236c5ce7' width='400' height='300'/%3E%3Cpath d='M200 150 L150 120 L150 180 L200 210 L250 180 L250 120 Z' fill='white' opacity='0.9'/%3E%3Ccircle cx='170' cy='150' r='15' fill='white' opacity='0.7'/%3E%3Ccircle cx='230' cy='150' r='15' fill='white' opacity='0.7'/%3E%3C/svg%3E",
+          badge: "new",
+        },
+        {
+          id: 2,
+          name: "Smart Watch",
+          category: "Wearables",
+          description:
+            "Feature-rich smartwatch with fitness tracking and heart rate monitor.",
+          price: 299.99,
+          oldPrice: null,
+          image:
+            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%2300b894' width='400' height='300'/%3E%3Crect x='150' y='80' width='100' height='140' rx='20' fill='white' opacity='0.9'/%3E%3Crect x='160' y='90' width='80' height='120' rx='15' fill='%2300b894'/%3E%3Ccircle cx='200' cy='150' r='25' fill='white' opacity='0.8'/%3E%3Cline x1='200' y1='150' x2='200' y2='135' stroke='%2300b894' stroke-width='3'/%3E%3Cline x1='200' y1='150' x2='210' y2='155' stroke='%2300b894' stroke-width='2'/%3E%3C/svg%3E",
+          badge: "sale",
+        },
+        {
+          id: 3,
+          name: "Laptop Stand",
+          category: "Accessories",
+          description:
+            "Ergonomic aluminum laptop stand for better posture and workspace organization.",
+          price: 49.99,
+          oldPrice: 69.99,
+          image:
+            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23fd79a8' width='400' height='300'/%3E%3Crect x='120' y='100' width='160' height='100' rx='5' fill='white' opacity='0.9'/%3E%3Crect x='130' y='110' width='140' height='80' fill='%23fd79a8' opacity='0.3'/%3E%3Cpolygon points='120,200 160,200 140,250 100,250' fill='white' opacity='0.9'/%3E%3Cpolygon points='240,200 280,200 300,250 260,250' fill='white' opacity='0.9'/%3E%3C/svg%3E",
+          badge: "sale",
+        },
+        {
+          id: 4,
+          name: "Bluetooth Speaker",
+          category: "Audio",
+          description:
+            "Portable Bluetooth speaker with 360-degree sound and waterproof design.",
+          price: 79.99,
+          oldPrice: null,
+          image:
+            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23fdcb6e' width='400' height='300'/%3E%3Ccircle cx='200' cy='150' r='60' fill='white' opacity='0.9'/%3E%3Ccircle cx='200' cy='150' r='40' fill='%23fdcb6e' opacity='0.5'/%3E%3Ccircle cx='200' cy='150' r='20' fill='white' opacity='0.7'/%3E%3Ccircle cx='180' cy='130' r='5' fill='white' opacity='0.8'/%3E%3Ccircle cx='220' cy='130' r='5' fill='white' opacity='0.8'/%3E%3Ccircle cx='180' cy='170' r='5' fill='white' opacity='0.8'/%3E%3Ccircle cx='220' cy='170' r='5' fill='white' opacity='0.8'/%3E%3C/svg%3E",
+          badge: "new",
+        },
+        {
+          id: 5,
+          name: "USB-C Hub",
+          category: "Accessories",
+          description:
+            "Multi-port USB-C hub with HDMI, USB 3.0, and SD card reader support.",
+          price: 39.99,
+          oldPrice: 49.99,
+          image:
+            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%23a29bfe' width='400' height='300'/%3E%3Crect x='150' y='110' width='100' height='80' rx='5' fill='white' opacity='0.9'/%3E%3Crect x='160' y='120' width='80' height='10' rx='2' fill='%23a29bfe'/%3E%3Crect x='160' y='140' width='80' height='10' rx='2' fill='%23a29bfe'/%3E%3Crect x='160' y='160' width='80' height='10' rx='2' fill='%23a29bfe'/%3E%3Ccircle cx='175' cy='175' r='8' fill='%23a29bfe'/%3E%3Ccircle cx='200' cy='175' r='8' fill='%23a29bfe'/%3E%3Ccircle cx='225' cy='175' r='8' fill='%23a29bfe'/%3E%3C/svg%3E",
+          badge: null,
+        },
+        {
+          id: 6,
+          name: "Wireless Mouse",
+          category: "Accessories",
+          description:
+            "Ergonomic wireless mouse with precision tracking and long battery life.",
+          price: 29.99,
+          oldPrice: 39.99,
+          image:
+            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Crect fill='%2300d4aa' width='400' height='300'/%3E%3Cellipse cx='200' cy='150' rx='80' ry='50' fill='white' opacity='0.9'/%3E%3Cpath d='M 180 130 Q 200 125 220 130' stroke='%2300d4aa' stroke-width='3' fill='none'/%3E%3Ccircle cx='190' cy='160' r='5' fill='%2300d4aa'/%3E%3Ccircle cx='210' cy='160' r='5' fill='%2300d4aa'/%3E%3C/svg%3E",
+          badge: "sale",
+        },
+      ];
+
+      // Render products
+      function renderProducts() {
+        const grid = document.getElementById("productsGrid");
+        grid.innerHTML = "";
+
+        products.forEach((product) => {
+          const card = document.createElement("div");
+          card.className = "product-card";
+
+          card.innerHTML = `
+          <div class="product-image">
+            ${
+              product.badge
+                ? `<span class="product-badge ${product.badge}">${product.badge}</span>`
+                : ""
+            }
+            <img src="${product.image}" alt="${product.name}" />
+          </div>
+          <div class="product-info">
+            <div class="product-category">${product.category}</div>
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-description">${product.description}</p>
+            <div class="product-footer">
+              <div class="product-price">
+                <span class="price-current">$${product.price.toFixed(2)}</span>
+                ${
+                  product.oldPrice
+                    ? `<span class="price-old">$${product.oldPrice.toFixed(
+                        2
+                      )}</span>`
+                    : ""
+                }
+              </div>
+              <button class="add-to-cart" onclick="addToCart(${
+                product.id
+              })">Add to Cart</button>
+            </div>
+          </div>
+        `;
+
+          grid.appendChild(card);
+        });
+      }
+
+      // Add to cart
+      function addToCart(productId) {
+        const product = products.find((p) => p.id === productId);
+        if (!product) return;
+
+        const modal = document.getElementById("cartModal");
+        const modalMessage = document.getElementById("modalMessage");
+        modalMessage.textContent = `${product.name} has been added to your cart!`;
+
+        // Update button state
+        const buttons = document.querySelectorAll(".add-to-cart");
+        buttons.forEach((btn) => {
+          if (btn.textContent.includes("Add to Cart")) {
+            btn.classList.add("added");
+            btn.textContent = "Added!";
+            setTimeout(() => {
+              btn.classList.remove("added");
+              btn.textContent = "Add to Cart";
+            }, 2000);
+          }
+        });
+
+        modal.classList.add("show");
+      }
+
+      // Close modal
+      function closeModal() {
+        const modal = document.getElementById("cartModal");
+        modal.classList.remove("show");
+      }
+
+      // Close modal on background click
+      document.addEventListener("click", (e) => {
+        const modal = document.getElementById("cartModal");
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+
+      // Initialize
+      window.addEventListener("DOMContentLoaded", () => {
+        renderProducts();
+      });
+    </script>
+  </body>
+</html>

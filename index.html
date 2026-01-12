@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ayoub | Portfolio</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body data-theme="light">
+    <!-- NAV -->
+    <nav>
+      <h1>Ayoubs Portfolio</h1>
+      <ul>
+        <li><a href="#about" onclick="scrollToSection('about')">About</a></li>
+        <li>
+          <a href="#projects" onclick="scrollToSection('projects')">Projects</a>
+        </li>
+        <li>
+          <a href="#contact" onclick="scrollToSection('contact')">Contact</a>
+        </li>
+        <li>
+          <button
+            class="theme-toggle"
+            id="themeToggle"
+            onclick="toggleTheme()"
+            aria-label="Toggle theme"
+          >
+            <span id="themeIcon">🌙</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-background"></div>
+      <div class="particles" id="particles"></div>
+      <div class="hero-content">
+        <h2>Hi, I'm Ayoub 👋</h2>
+        <p>
+          Fullstack Developer passionate about building clean and colorful user
+          experiences.
+        </p>
+        <button class="hero-button" onclick="scrollToSection('projects')">
+          View My Work!
+        </button>
+      </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <h2 class="section-title">About Me</h2>
+      <p>
+        I'm a software developer with a focus on HTML, CSS, JavaScript, and
+        modern UI design, Paired with modern AI skills. I highly enjoy coding
+        user-friendly web-pages with great attention to detail and aesthetics.
+        My goal is to create engaging digital experiences that are both
+        functional and visually appealing.
+      </p>
+      
+      
+    </section>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+      <h2 class="section-title">Projects</h2>
+      <div class="projects">
+        <div class="card" onclick="openProject('color-generator')">
+          <div class="card-image">
+            <div class="card-image-placeholder color-generator-img">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient
+                    id="colorGrad1"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop
+                      offset="0%"
+                      style="stop-color: #6c5ce7; stop-opacity: 1"
+                    />
+                    <stop
+                      offset="100%"
+                      style="stop-color: #00b894; stop-opacity: 1"
+                    />
+                  </linearGradient>
+                  <linearGradient
+                    id="colorGrad2"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop
+                      offset="0%"
+                      style="stop-color: #fd79a8; stop-opacity: 1"
+                    />
+                    <stop
+                      offset="100%"
+                      style="stop-color: #fdcb6e; stop-opacity: 1"
+                    />
+                  </linearGradient>
+                </defs>
+                <rect
+                  width="80"
+                  height="80"
+                  x="20"
+                  y="20"
+                  fill="url(#colorGrad1)"
+                  rx="10"
+                />
+                <rect
+                  width="80"
+                  height="80"
+                  x="100"
+                  y="20"
+                  fill="url(#colorGrad2)"
+                  rx="10"
+                />
+                <rect
+                  width="80"
+                  height="80"
+                  x="20"
+                  y="100"
+                  fill="#a29bfe"
+                  rx="10"
+                />
+                <rect
+                  width="80"
+                  height="80"
+                  x="100"
+                  y="100"
+                  fill="#00d4aa"
+                  rx="10"
+                />
+                <circle cx="60" cy="60" r="15" fill="white" opacity="0.8" />
+                <circle cx="140" cy="60" r="15" fill="white" opacity="0.8" />
+              </svg>
+            </div>
+          </div>
+          <h3>Color Generator</h3>
+          <p>
+            A fun app that generates random color palettes with beautiful
+            gradients and hex codes.
+          </p>
+          <button
+            class="card-button"
+            onclick="event.stopPropagation(); openProject('color-generator')"
+          >
+            View Project
+          </button>
+        </div>
+        <div class="card" onclick="openProject('counter-app')">
+          <div class="card-image">
+            <div class="card-image-placeholder counter-app-img">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <rect
+                  x="60"
+                  y="40"
+                  width="80"
+                  height="120"
+                  rx="15"
+                  fill="#6c5ce7"
+                  opacity="0.2"
+                />
+                <rect
+                  x="70"
+                  y="50"
+                  width="60"
+                  height="100"
+                  rx="10"
+                  fill="#6c5ce7"
+                />
+                <circle cx="100" cy="80" r="8" fill="white" />
+                <rect
+                  x="90"
+                  y="100"
+                  width="20"
+                  height="3"
+                  fill="white"
+                  rx="1.5"
+                />
+                <rect
+                  x="90"
+                  y="110"
+                  width="20"
+                  height="3"
+                  fill="white"
+                  rx="1.5"
+                />
+                <rect
+                  x="85"
+                  y="125"
+                  width="30"
+                  height="20"
+                  rx="5"
+                  fill="#00b894"
+                />
+                <circle cx="100" cy="135" r="3" fill="white" />
+                <text
+                  x="100"
+                  y="145"
+                  text-anchor="middle"
+                  fill="white"
+                  font-size="8"
+                  font-weight="bold"
+                >
+                  0
+                </text>
+              </svg>
+            </div>
+          </div>
+          <h3>Counter App</h3>
+          <p>
+            Interactive counter with limits and smooth animations for a
+            delightful user experience.
+          </p>
+          <button
+            class="card-button"
+            onclick="event.stopPropagation(); openProject('counter-app')"
+          >
+            View Project
+          </button>
+        </div>
+        <div class="card" onclick="openProject('product-gallery')">
+          <div class="card-image">
+            <div class="card-image-placeholder product-gallery-img">
+              <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <rect
+                  x="30"
+                  y="40"
+                  width="60"
+                  height="80"
+                  rx="8"
+                  fill="#fd79a8"
+                  opacity="0.3"
+                />
+                <rect
+                  x="35"
+                  y="45"
+                  width="50"
+                  height="70"
+                  rx="6"
+                  fill="#fd79a8"
+                />
+                <rect
+                  x="40"
+                  y="50"
+                  width="40"
+                  height="30"
+                  fill="white"
+                  opacity="0.9"
+                />
+                <rect x="40" y="85" width="15" height="2" fill="white" rx="1" />
+                <rect x="40" y="92" width="25" height="2" fill="white" rx="1" />
+                <rect
+                  x="110"
+                  y="40"
+                  width="60"
+                  height="80"
+                  rx="8"
+                  fill="#00b894"
+                  opacity="0.3"
+                />
+                <rect
+                  x="115"
+                  y="45"
+                  width="50"
+                  height="70"
+                  rx="6"
+                  fill="#00b894"
+                />
+                <rect
+                  x="120"
+                  y="50"
+                  width="40"
+                  height="30"
+                  fill="white"
+                  opacity="0.9"
+                />
+                <rect
+                  x="120"
+                  y="85"
+                  width="15"
+                  height="2"
+                  fill="white"
+                  rx="1"
+                />
+                <rect
+                  x="120"
+                  y="92"
+                  width="25"
+                  height="2"
+                  fill="white"
+                  rx="1"
+                />
+                <circle cx="85" cy="30" r="12" fill="#fdcb6e" />
+                <circle cx="85" cy="30" r="8" fill="white" />
+              </svg>
+            </div>
+          </div>
+          <h3>Product Gallery</h3>
+          <p>
+            Modern product cards with hover effects and elegant transitions.
+          </p>
+          <button
+            class="card-button"
+            onclick="event.stopPropagation(); openProject('product-gallery')"
+          >
+            View Project
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2 class="section-title">Contact</h2>
+      <p class="contact-info">Email: samiayoubnas@gmail.com</p>
+      <button class="contact-button" onclick="handleContact()">
+        Get In Touch
+      </button>
+    </section>
+
+    <footer>© 2026 Ayoub — All Rights Reserved</footer>
+
+    <script src="index.js"></script>
+  </body>
+</html>
